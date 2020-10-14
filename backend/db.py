@@ -28,16 +28,32 @@ def init_db():
     with open(SCHEMA_PATH, 'r') as f:
         db.executescript(f.read())
 
-def query_db(query, args=()):
+# Inserts the insert query into the db and returns the id of the newly inserted object
+# Returns None if insert fails
+def insert_db(query, args=()):
+    con = get_db()
+    
+    cur = con.cursor()
+    old_rowcount = cur.rowcount
+    cur.execute(query, args)
+    new_rowcount = cur.rowcount
+    results = cur.lastrowid
+    cur.close()
+
+    return results if new_rowcount != old_rowcount else None
+
+def delete_db(query, args=()):
+    con = get_db()
+    
+    cur = con.cursor()
+    cur.execute(query, args)
+    cur.close()
+
+# Returns the row(s) obtained from the query
+def select_db(query, args=(), one=False):
     con = get_db()
     cur = con.cursor().execute(query, args)
     results = cur.fetchall()
     cur.close()
 
-    return results if results else None
-
-def insert_location(city, planet, capacity):
-    query_db(
-        "INSERT INTO location (city_name, planet_name, max_capacity) VALUES (?, ?, ?)",
-        (city, planet, capacity)
-    )
+    return (results[0] if results else None) if one else results

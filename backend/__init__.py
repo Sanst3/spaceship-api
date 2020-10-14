@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, jsonify
 from flask_cors import CORS
-from . import db
+from . import spaceship as ss
 
 def create_app(test_config=None):
     # create and configure the app
@@ -43,11 +43,14 @@ def create_app(test_config=None):
         }
         
 
-        db.insert_location("sydney", "earth", 5)
+        new_id = ss.insert_location("sydney", "earth", 5)
 
-        results = db.query_db("SELECT * FROM LOCATION")
-        for a in results:
-            print(a["city_name"])
+        new_ship = ss.insert_ship("bob", "john", "broken", new_id)
+
+        ship = ss.get_ship_by_id(new_ship)
+
+        ss.print_row(ship)
+        
         return jsonify(output)
 
     return app

@@ -6,14 +6,16 @@ CREATE TABLE ship (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL, 
     model TEXT NOT NULL,
-    status TEXT NOT NULL
+    status TEXT NOT NULL,
+    UNIQUE(name, model)
 );
 
 CREATE TABLE location (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     city_name TEXT NOT NULL,
     planet_name TEXT NOT NULL,
-    max_capacity INTEGER NOT NULL
+    max_capacity INTEGER NOT NULL,
+    UNIQUE(city_name, planet_name)
 );
 
 CREATE TABLE parking (
