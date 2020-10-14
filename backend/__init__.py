@@ -1,10 +1,14 @@
 import os
 
-from flask import Flask
+from flask import Flask, jsonify
+from flask_cors import CORS
+from . import db
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app)
+
     app.config.from_mapping(
         SECRET_KEY="dev",
         DATABASE=os.path.join(app.instance_path, "flaskr.sqlite"),
@@ -22,10 +26,28 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    
+    with app.app_context():
+        db.init_db()
 
     # a simple page that says hello
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
+
+    @app.route('/test', methods=['GET'])
+    def test():
+        output = {
+            'id': "boi",
+            'title': "test"
+        }
+        
+
+        db.insert_location("sydney", "earth", 5)
+
+        results = db.query_db("SELECT * FROM LOCATION")
+        for a in results:
+            print(a["city_name"])
+        return jsonify(output)
 
     return app
