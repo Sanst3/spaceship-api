@@ -54,8 +54,14 @@ def create_app(test_config=None):
         else:
             print("LOCATION DELETED")
 
-        ss.print_row(ss.get_ship_by_id(new_ship))
-
         return jsonify(output)
+
+    @app.route('/ships/<id>', methods=['GET'])
+    def ships_get_by_id(id):
+        loc = ss.insert_location("sydney", "earth", 1)
+        loc2 = ss.insert_location("melbourne", "earth", 0)
+
+        new_ship = ss.insert_ship("bob", "john", "broken", loc)
+        return jsonify(ss.get_ship_by_id(id))
 
     return app
