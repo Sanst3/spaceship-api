@@ -7,19 +7,21 @@ def print_row(row):
 
     print("Ending print")
 
-def unpark_ship(ship_id):
-    db.delete_db("DELETE FROM parking WHERE ship_id = ?", (ship_id,))
+def print_row_list(list):
+    for row in list:
+        print_row(row)
 
-def park_ship(ship_id, location_id):
-    db.insert_db("INSERT INTO parking (ship_id, location_id) VALUES (?, ?)", (ship_id, location_id))
+def print_parked_ships(location_id):
+    for ship in get_parked_ships(location_id):
+        print_row(ship)
+
 
 def move_ship(ship_id, location_id):
     location = get_location_by_id(location_id)
     ret = False
     if (has_space(location)):
         ret = True
-        unpark_ship(ship_id)
-        park_ship(ship_id, location_id)
+        db.insert_db("UPDATE ship SET parking_id = ? WHERE id = ?", (location_id, ship_id))
 
     return ret
 
@@ -35,24 +37,18 @@ def insert_ship(name, model, status, location_id):
     location = get_location_by_id(location_id)
     if (has_space(location)):
         new_id = db.insert_db(
-            "INSERT INTO ship (name, model, status) VALUES (?, ?, ?)",
-            (name, model, status)
-        )
-        db.insert_db(
-            "INSERT INTO parking (ship_id, location_id) VALUES (?, ?)",
-            (new_id, location_id)
+            "INSERT INTO ship (name, model, status, parking_id) VALUES (?, ?, ?, ?)",
+            (name, model, status, location_id)
         )
 
     return new_id
-    
-def get_ship_by_name(name, model):
-    ship = db.select_db(
-        "SELECT * FROM ship WHERE name=? AND model=?",
-        (name, model),
-        True
-    )
 
-    return ship if ship else None
+
+def delete_location(location_id):
+    db.delete_db("DELETE FROM location WHERE id = ?", (location_id,))
+
+def delete_ship(ship_id):
+    db.delete_db("DELETE FORM ship WHERE id = ?", (ship_id,))
 
 def get_ship_by_id(ship_id):
     ship = db.select_db(
@@ -63,16 +59,6 @@ def get_ship_by_id(ship_id):
 
     return ship if ship else None
 
-
-def get_location_by_name(city, planet):
-    location = db.select_db(
-        "SELECT * FROM location WHERE city_name=? AND planet_name=?",
-        (city, planet),
-        True
-    )
-
-    return location if location else None
-
 def get_location_by_id(location_id):
     location = db.select_db(
         "SELECT * FROM location WHERE id=?",
@@ -82,13 +68,18 @@ def get_location_by_id(location_id):
 
     return location if location else None
 
+def get_parked_ships(location_id):
+    return db.select_db("SELECT * FROM ship WHERE parking_id = ?", (location_id,))
+
+def get_locations():
+    return db.select_db("SELECT * FROM location")
 
 def has_space(location):
     return (location["max_capacity"] - fill_count(location)) > 0
 
 def fill_count(location):
     
-    query = "SELECT COUNT(*) AS count FROM locationw WHERE location.id=?"
+    query = "SELECT COUNT(*) AS count FROM ship WHERE parking_id=?"
     count = db.select_db(query, (location["id"],), True)
 
     return count["count"]

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from . import spaceship as ss
 
@@ -35,22 +35,27 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
-    @app.route('/test', methods=['GET'])
+    @app.route('/test', methods=['GET', 'POST'])
     def test():
         output = {
             'id': "boi",
             'title': "test"
         }
-        
 
-        new_id = ss.insert_location("sydney", "earth", 5)
+        loc = ss.insert_location("sydney", "earth", 1)
+        loc2 = ss.insert_location("melbourne", "earth", 0)
 
-        new_ship = ss.insert_ship("bob", "john", "broken", new_id)
+        new_ship = ss.insert_ship("bob", "john", "broken", loc)
 
-        ship = ss.get_ship_by_id(new_ship)
+        ss.delete_location(loc)
 
-        ss.print_row(ship)
-        
+        if (ss.get_location_by_id(loc)):
+            print("LOCATION STILL THERE")
+        else:
+            print("LOCATION DELETED")
+
+        ss.print_row(ss.get_ship_by_id(new_ship))
+
         return jsonify(output)
 
     return app
