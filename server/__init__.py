@@ -4,6 +4,9 @@ from flask import Flask, jsonify, request, make_response, render_template
 from flask_cors import CORS
 from . import spaceship as ss
 
+BAD_REQUEST = "400 Bad Request"
+NO_CONTENT = "204 No Content"
+
 def is_int(string):
     try:
         
@@ -18,6 +21,9 @@ def make_status_response(status):
     response.status = status
     
     return response
+
+
+
 
 
 def create_app(test_config=None):
@@ -47,7 +53,7 @@ def create_app(test_config=None):
         db.init_db()
 
     # a simple page that says hello
-    @app.route('/')
+    @app.route('/', methods=['GET'])
     def home():
         return render_template('home.html')
 
@@ -71,16 +77,88 @@ def create_app(test_config=None):
     # Returns a JSON payload of a ship given a ship ID
     @app.route('/ships/<id>', methods=['GET'])
     def ships_id(id):
-        if (not is_int(id)):
-            return make_status_response("400 Bad Request")
+        if not is_int(id):
+            return make_status_response(BAD_REQUEST)
 
         ship = ss.get_ship_by_id(id)
         
-        if (ship):
-            return jsonify(ss.get_ship_by_id(id))
+        if ship:
+            return jsonify(ship)
         else:
-            return make_status_response("204 No Content")
+            return make_status_response(NO_CONTENT)
 
         return response
 
+
+    @app.route('/ships', methods=['POST'])
+    def ships_insert():
+        payload = request.get_json()
+        print(payload)
+        # Checks validity of call
+        if not payload:
+            print("AERE")
+            return make_status_response(BAD_REQUEST)
+
+        print("PAYLOAD EXISTS")
+        valid_input = True
+        attr_list = ["name", "model", "status", "location_id"]
+
+        if not all(attr in payload for attr in attr_list):
+            print("HERE")
+            return make_status_response(BAD_REQUEST)
+
+        # Adds ship to db
+        new_id = ss.insert_ship(payload["name"], payload["model"], payload["status"], payload["location_id"])
+        
+        if (new_id):
+            print("SUCCESS")
+            return jsonify({ 'id': new_id })
+        else:
+            print("BERE")
+            return make_status_response(BAD_REQUEST)
+
+    # Returns a JSON payload of a ship given a ship ID
+    @app.route('/locations/<id>', methods=['GET'])
+    def locations_id(id):
+        if not is_int(id):
+            return make_status_response(BAD_REQUEST)
+
+        location = ss.get_location_by_id(id)
+        
+        if location:
+            return jsonify(location)
+        else:
+            return make_status_response(NO_CONTENT)
+
+        return response
+
+    @app.route('/locations', methods=['POST'])
+    def locations_insert():
+        payload = request.get_json()
+        print(payload)
+        # Checks validity of call
+        if not payload:
+            print("AERE")
+            return make_status_response(BAD_REQUEST)
+
+        print("PAYLOAD EXISTS")
+        valid_input = True
+        attr_list = ["city", "planet", "capacity"]
+
+        if not all(attr in payload for attr in attr_list):
+            print("HERE")
+            return make_status_response(BAD_REQUEST)
+
+        # Adds ship to db
+        new_id = ss.insert_location(payload["city"], payload["planet"], payload["capacity"])
+        
+        if (new_id):
+            ss.print_row(ss.get_location_by_id(new_id))
+            return jsonify({ 'id': new_id })
+        else:
+            print("BERE")
+            return make_status_response(BAD_REQUEST)
+
     return app
+
+    

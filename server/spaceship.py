@@ -35,11 +35,15 @@ def insert_location(city, planet, capacity):
 
 def insert_ship(name, model, status, location_id):
     location = get_location_by_id(location_id)
-    if (has_space(location)):
+    decoded_status = decode_status(status)
+
+    if (has_space(location) and decoded_status):
         new_id = db.insert_db(
             "INSERT INTO ship (name, model, status, parking_id) VALUES (?, ?, ?, ?)",
-            (name, model, status, location_id)
+            (name, model, decoded_status, location_id)
         )
+    else:
+        new_id = None
 
     return new_id
 

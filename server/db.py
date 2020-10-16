@@ -17,10 +17,9 @@ def get_db():
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = sqlite3.connect(DB_PATH)
-    db.row_factory = dict_factory
+        db.row_factory = dict_factory
 
     return db
-
 
 def close_db(e=None):
     db = getattr(g, '_database', None)
@@ -45,6 +44,7 @@ def insert_db(query, args=()):
     new_rowcount = cur.rowcount
     results = cur.lastrowid
     cur.close()
+    
 
     return results if new_rowcount != old_rowcount else None
 
