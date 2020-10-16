@@ -1,8 +1,24 @@
 import os
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response, render_template
 from flask_cors import CORS
 from . import spaceship as ss
+
+def is_int(string):
+    try:
+        
+        int(string)
+        print("IS INT")
+        return True
+    except ValueError:
+        return False
+
+def make_status_response(status):
+    response = make_response()
+    response.status = status
+    
+    return response
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -31,37 +47,40 @@ def create_app(test_config=None):
         db.init_db()
 
     # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+    @app.route('/')
+    def home():
+        return render_template('home.html')
 
     @app.route('/test', methods=['GET', 'POST'])
     def test():
-        output = {
-            'id': "boi",
-            'title': "test"
-        }
-
         loc = ss.insert_location("sydney", "earth", 1)
         loc2 = ss.insert_location("melbourne", "earth", 0)
 
-        new_ship = ss.insert_ship("bob", "john", "broken", loc)
+        new_ship = ss.insert_ship("bob", "john", "broken", loc2)
 
-        ss.delete_location(loc)
 
         if (ss.get_location_by_id(loc)):
             print("LOCATION STILL THERE")
         else:
             print("LOCATION DELETED")
+        
+        output = ss.get_ship_by_id(new_ship)
 
         return jsonify(output)
 
+    # Returns a JSON payload of a ship given a ship ID
     @app.route('/ships/<id>', methods=['GET'])
-    def ships_get_by_id(id):
-        loc = ss.insert_location("sydney", "earth", 1)
-        loc2 = ss.insert_location("melbourne", "earth", 0)
+    def ships_id(id):
+        if (not is_int(id)):
+            return make_status_response("400 Bad Request")
 
-        new_ship = ss.insert_ship("bob", "john", "broken", loc)
-        return jsonify(ss.get_ship_by_id(id))
+        ship = ss.get_ship_by_id(id)
+        
+        if (ship):
+            return jsonify(ss.get_ship_by_id(id))
+        else:
+            return make_status_response("204 No Content")
+
+        return response
 
     return app

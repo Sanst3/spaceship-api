@@ -4,8 +4,8 @@ import click
 from flask import current_app, g
 from flask.cli import with_appcontext
 
-DB_PATH = "backend/spaceship_db.db"
-SCHEMA_PATH = "backend/spaceship_schema.sql"
+DB_PATH = "server/spaceship_db.db"
+SCHEMA_PATH = "server/spaceship_schema.sql"
 
 def dict_factory(cursor, row):
     d = {}

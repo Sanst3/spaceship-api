@@ -15,7 +15,7 @@ def print_parked_ships(location_id):
     for ship in get_parked_ships(location_id):
         print_row(ship)
 
-
+#TODO ENSURE STATUS TO BLOCK MOVEMENT
 def move_ship(ship_id, location_id):
     location = get_location_by_id(location_id)
     ret = False
@@ -43,6 +43,29 @@ def insert_ship(name, model, status, location_id):
 
     return new_id
 
+def decode_status(status):
+    if status == '0':
+        return "Decommissioned"
+    elif status == '1':
+        return "Maintenance"
+    elif status == '2':
+        return "Operational"
+    else:
+        return None
+
+# Changes a ship's status given an ship_id and a status code
+# 0: Decommissioned
+# 1: Maintenance
+# 2: Operational
+def change_ship_status(ship_id, status):
+
+    decoded_status = decode_status(status)
+    if (decoded_status):
+        db.insert_db("UPDATE ship SET status = ? WHERE id = ?", (decoder[status], ship_id))
+    else:
+        return False
+    
+    return True
 
 def delete_location(location_id):
     db.delete_db("DELETE FROM location WHERE id = ?", (location_id,))
@@ -73,6 +96,9 @@ def get_parked_ships(location_id):
 
 def get_locations():
     return db.select_db("SELECT * FROM location")
+
+def is_operational(ship_id):
+    return db.select_db("SELECT * FROM ship WHERE id = ? AND status = 'Operational'", (ship_id,))
 
 def has_space(location):
     return (location["max_capacity"] - fill_count(location)) > 0
