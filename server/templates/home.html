@@ -8,47 +8,126 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    
+
+    <title>Spaceship API</title>
   </head>
   <body>
     <div class="container">
         <div class="row">
             <div class="col-sm">
-                <p>Row 1 Form 1</p>
+                <p>/ships/[id] GET</p>
+                <form id="shipsGetForm">
+                    <div class="form-group">
+                        <label for="shipsGetId">[id]</label>
+                        <input type="text" class="form-control" name="id" id="shipsGetId">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <div class="col-sm">
-                <p>Row 1 Form 2</p>
+                <p>/ships/[id] DELETE</p>
+                <form id="shipsDeleteForm">
+                    <div class="form-group">
+                        <label for="shipsDeleteId">[id]</label>
+                        <input type="text" class="form-control" name="id" id="shipsDeleteId">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <div class="col-sm">
-                <p>Row 1 Form 3</p>
+                <p>/ships POST</p>
+                <form id="shipsInsertForm">
+                    <div class="form-group">
+                        <label for="shipsInsertName">Name</label>
+                        <input type="text" class="form-control" name="name" id="shipsInsertName">
+                    </div>
+                    <div class="form-group">
+                        <label for="shipsInsertModel">Model</label>
+                        <input type="text" class="form-control" name="model" id="shipsInsertModel">
+                    </div>
+                    <div class="form-group">
+                        <label for="shipsInsertStatus">Status Code</label>
+                        <input type="text" class="form-control" name="status" id="shipsInsertStatus">
+                    </div>
+                    <div class="form-group">
+                        <label for="shipsInsertLocationId">Parked Location ID</label>
+                        <input type="text" class="form-control" name="location_id" id="shipsInsertLocationId">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
         </div>
         <div class="row">
             <div class="col-sm">
-                <p>Row 1 Form 1</p>
+                <p>/locations/[id] GET</p>
+                <form id="locationssGetForm">
+                    <div class="form-group">
+                        <label for="locationsGetId">[id]</label>
+                        <input type="text" class="form-control" name="id" id="locationsGetId">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <div class="col-sm">
-                <p>Row 1 Form 2</p>
+                <p>/locations/[id] DELETE</p>
+                <form id="locationsDeleteForm">
+                    <div class="form-group">
+                        <label for="locationsDeleteId">[id]</label>
+                        <input type="text" class="form-control" name="id" id="locationsDeleteId">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <div class="col-sm">
-                <p>Row 1 Form 3</p>
+                <p>/locations GET</p>
             </div>
         </div>
         <div class="row">
             <div class="col-sm">
-                <p>Row 1 Form 1</p>
+                <p>/locations POST</p>
+                <form id="locationsInsertForm">
+                    <div class="form-group">
+                        <label for="locationsInsertCity">City Name</label>
+                        <input type="text" class="form-control" name="city" id="locationsInsertCity">
+                    </div>
+                    <div class="form-group">
+                        <label for="locationsInsertPlanet">Planet Name</label>
+                        <input type="text" class="form-control" name="planet" id="locationsInsertPlanet">
+                    </div>
+                    <div class="form-group">
+                        <label for="locationsInsertCapacity">Capacity</label>
+                        <input type="text" class="form-control" name="capacity" id="locationsInsertCapacity">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <div class="col-sm">
-                <p>Row 1 Form 2</p>
+                <p>/locations/[id]/parked GET</p>
             </div>
             <div class="col-sm">
-                <p>Row 1 Form 3</p>
+                <p>/ships/status/[id] POST</p>
             </div>
+            <div class="col-sm">
+                <p>/ships/parking/[id] POST</p>
+            </div>
+        </div>
+        <h1>
+            Fetch Result
+        </h1>
+        <div class="row">
+            <div class="col-sm" id="result">
+                <p></p>
+
+            </div>
+        </div>
+        <h1>
+            DB Environment
+        </h1>
+        <div class="row" id="state">
         </div>
     </div>>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

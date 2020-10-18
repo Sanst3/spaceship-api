@@ -64,7 +64,7 @@ def delete_location(location_id):
     return db.delete_db("DELETE FROM location WHERE id = ?", (location_id,))
 
 def delete_ship(ship_id):
-    return db.delete_db("DELETE FORM ship WHERE id = ?", (ship_id,))
+    return db.delete_db("DELETE FROM ship WHERE id = ?", (ship_id,))
 
 def get_ship_by_id(ship_id):
     ship = db.select_db(
@@ -94,6 +94,9 @@ def is_operational(ship_id):
     return db.select_db("SELECT * FROM ship WHERE id = ? AND status = 'Operational'", (ship_id,))
 
 def has_space(location):
+    if not location:
+        return False
+
     return (location["max_capacity"] - fill_count(location)) > 0
 
 def fill_count(location):

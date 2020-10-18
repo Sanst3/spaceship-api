@@ -32,8 +32,12 @@ def insert_db(query, args=()):
 
     cur = con.cursor()
     old_rowcount = cur.rowcount
-    cur.execute(query, args)
-    con.commit()
+    try:
+        cur.execute(query, args)
+        con.commit()
+    except sqlite3.IntegrityError as err:
+        print(err)
+        return None
     new_rowcount = cur.rowcount
     results = cur.lastrowid
 

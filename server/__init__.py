@@ -66,16 +66,15 @@ def ships_id(id):
 
     return response
 
-@app.route('/ships/<id>', methods=['GET'])
+@app.route('/ships/<id>', methods=['DELETE'])
 def ships_del(id):
     if not is_int(id):
         return make_status_response(BAD_REQUEST)
 
-    success = ss.delete_ship(id)
+    if not ss.delete_ship(id):
+        make_status_response(BAD_REQUEST)
 
-    message = SUCCESS if success else BAD_REQUEST
-    
-    return make_status_response(message)
+    return jsonify({ 'id': id, 'deleted': "true" })
 
 @app.route('/ships', methods=['POST'])
 def ships_insert():
@@ -113,16 +112,15 @@ def locations_id(id):
 
     return response
 
-@app.route('/locations/<id>', methods=['GET'])
+@app.route('/locations/<id>', methods=['DELETE'])
 def locations_del(id):
     if not is_int(id):
         return make_status_response(BAD_REQUEST)
 
-    success = ss.delete_location(id)
+    if not ss.delete_location(id):
+        make_status_response(BAD_REQUEST)
 
-    message = SUCCESS if success else BAD_REQUEST
-    
-    return make_status_response(message)
+    return jsonify({ 'id': id, 'deleted': "true" })
     
 @app.route('/locations', methods=['GET'])
 def locations_get_all():
@@ -139,6 +137,9 @@ def locations_insert():
     attr_list = ["city", "planet", "capacity"]
 
     if not all(attr in payload for attr in attr_list):
+        return make_status_response(BAD_REQUEST)
+
+    if not is_int(payload["capacity"]):
         return make_status_response(BAD_REQUEST)
 
     # Adds ship to db
@@ -169,7 +170,7 @@ def status_update(id):
     success = ss.change_ship_status(id, payload["status"])
 
     if (success):
-        return make_status_response(SUCCESS)
+        return jsonify({ 'status': payload["status"]} )
     else:
         return make_status_response(BAD_REQUEST)
 
@@ -188,6 +189,6 @@ def ships_move(id):
     success = ss.move_ship(id, payload["location_id"])
 
     if (success):
-        return make_status_response(SUCCESS)
+        return jsonify({ 'location_id': id })
     else:
         return make_status_response(BAD_REQUEST)
