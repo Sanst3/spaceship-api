@@ -7,16 +7,14 @@ CREATE TABLE ship (
     name TEXT NOT NULL, 
     model TEXT NOT NULL,
     status TEXT NOT NULL,
-    parking_id INTEGER NOT NULL REFERENCES location (id),
-    UNIQUE(name, model)
+    parking_id INTEGER NOT NULL REFERENCES location (id)
 );
 
 CREATE TABLE location (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     city_name TEXT NOT NULL,
     planet_name TEXT NOT NULL,
-    max_capacity INTEGER NOT NULL,
-    UNIQUE(city_name, planet_name)
+    max_capacity INTEGER NOT NULL
 );
 
 CREATE TRIGGER delete_parkingless_ships
