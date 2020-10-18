@@ -11,8 +11,7 @@ function fetchPost(url, requestBody) {
         if (response.status == 200) {
             return response.json();
         } else {
-            console.log(response);
-            throw "Error";
+            throw response.statusText;
         }
     })
 }
@@ -28,7 +27,7 @@ function fetchGet(url) {
         if (response.status == 200) {
             return response.json();
         } else {
-            throw "Error";
+            throw response.statusText;
         }
     })
 }
@@ -44,7 +43,7 @@ function fetchDelete(url) {
         if (response.status == 200) {
             return response.json();
         } else {
-            throw "Error";
+            throw response.statusText;
         }
     })
 }
@@ -125,10 +124,10 @@ function insertState() {
     .catch(error => { console.log(error); })
 }
 
-function insertError() {
+function insertError(message) {
     let wrapper = $("#result")
     let row = $(document.createElement("p"));
-    row.text("Error");
+    row.text(message);
     wrapper.append(row);
 }
 
@@ -144,19 +143,18 @@ function addFormListener(formId, url, method, variableId) {
         let array = $(formSelector).serializeArray();
         let args = convertArray(array);
 
-        if (variableId) { url = url + args["id"]; }
-
+        let newUrl = variableId ? url + args["id"] : url;
         let fetchFunc;
 
         switch(method) {
             case "POST":
-                fetchFunc = fetchPost(url, args);
+                fetchFunc = fetchPost(newUrl, args);
                 break;
             case "GET":
-                fetchFunc = fetchGet(url);
+                fetchFunc = fetchGet(newUrl);
                 break;
             case "DELETE":
-                fetchFunc = fetchDelete(url);
+                fetchFunc = fetchDelete(newUrl);
                 break;
 
         }
@@ -168,7 +166,7 @@ function addFormListener(formId, url, method, variableId) {
         .catch(error => {
             console.log(error);
             refresh();
-            insertError(); }
+            insertError(error); }
         );
         return false;
     });

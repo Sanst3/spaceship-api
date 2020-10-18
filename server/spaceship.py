@@ -52,13 +52,11 @@ def insert_ship(name, model, status, location_id):
 # 2: Operational
 def change_ship_status(ship_id, status):
     decoded_status = decode_status(status)
-    if (decoded_status):
-        db.insert_db("UPDATE ship SET status = ? WHERE id = ?", (decoded_status, ship_id))
+    if decoded_status and db.insert_db("UPDATE ship SET status = ? WHERE id = ?", (decoded_status, ship_id)):
+        return True
     else:
         return False
     
-    return True
-
 def delete_location(location_id):
     return db.delete_db("DELETE FROM location WHERE id = ?", (location_id,))
 
