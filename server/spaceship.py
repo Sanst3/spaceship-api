@@ -19,7 +19,7 @@ def print_parked_ships(location_id):
 def move_ship(ship_id, location_id):
     location = get_location_by_id(location_id)
     ret = False
-    if (has_space(location)):
+    if (has_space(location) and is_operational(ship_id)):
         ret = True
         db.insert_db("UPDATE ship SET parking_id = ? WHERE id = ?", (location_id, ship_id))
 
@@ -47,22 +47,11 @@ def insert_ship(name, model, status, location_id):
 
     return new_id
 
-def decode_status(status):
-    if status == '0':
-        return "Decommissioned"
-    elif status == '1':
-        return "Maintenance"
-    elif status == '2':
-        return "Operational"
-    else:
-        return None
-
 # Changes a ship's status given an ship_id and a status code
 # 0: Decommissioned
 # 1: Maintenance
 # 2: Operational
 def change_ship_status(ship_id, status):
-
     decoded_status = decode_status(status)
     if (decoded_status):
         db.insert_db("UPDATE ship SET status = ? WHERE id = ?", (decoder[status], ship_id))
@@ -72,10 +61,10 @@ def change_ship_status(ship_id, status):
     return True
 
 def delete_location(location_id):
-    db.delete_db("DELETE FROM location WHERE id = ?", (location_id,))
+    return db.delete_db("DELETE FROM location WHERE id = ?", (location_id,))
 
 def delete_ship(ship_id):
-    db.delete_db("DELETE FORM ship WHERE id = ?", (ship_id,))
+    return db.delete_db("DELETE FORM ship WHERE id = ?", (ship_id,))
 
 def get_ship_by_id(ship_id):
     ship = db.select_db(
@@ -113,3 +102,21 @@ def fill_count(location):
     count = db.select_db(query, (location["id"],), True)
 
     return count["count"]
+
+def decode_status(status):
+    if status == '0':
+        return "Decommissioned"
+    elif status == '1':
+        return "Maintenance"
+    elif status == '2':
+        return "Operational"
+    else:
+        return None
+
+def is_operational(ship_id):
+    result = False
+    ship = db.select_db("SELECT * FROM ship WHERE id = ?", (ship_id,), True)
+    if ship:
+        result = ship["status"] == "Operational"
+
+    return result

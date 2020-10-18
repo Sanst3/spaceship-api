@@ -26,11 +26,15 @@ fetch_post("http://localhost:5000/locations", {
 })
 .then(output => {return output.json()})
 .then(res => {console.log(res)})
-.catch(error => {
-    console.error("ERROR: ", error)
-})
-
-fetch_get("http://localhost:5000/locations/1")
+.then(res => {return fetch_post("http://localhost:5000/ships", {
+    name: "bob",
+    model: "pal",
+    status: "2",
+    location_id: "1"
+})})
+.then(output => {return output.json()})
+.then(res => {console.log(res)})
+.then(res => {return fetch_get("http://localhost:5000/ships/1")})
 .then(output => {return output.json()})
 .then(res => {console.log(res)})
 .catch(error => {

@@ -1,7 +1,7 @@
 import sqlite3
 
 import click
-from flask import current_app, g
+from flask import current_app
 from flask.cli import with_appcontext
 
 DB_PATH = "server/spaceship_db.db"
@@ -14,18 +14,10 @@ def dict_factory(cursor, row):
     return d
 
 def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DB_PATH)
-        db.row_factory = dict_factory
+    db = sqlite3.connect(DB_PATH)
+    db.row_factory = dict_factory
 
     return db
-
-def close_db(e=None):
-    db = getattr(g, '_database', None)
-
-    if db is not None:
-        db.close()
 
 def init_db():
     db = get_db()
@@ -37,29 +29,43 @@ def init_db():
 # Returns None if insert fails
 def insert_db(query, args=()):
     con = get_db()
-    
+
     cur = con.cursor()
     old_rowcount = cur.rowcount
     cur.execute(query, args)
+    con.commit()
     new_rowcount = cur.rowcount
     results = cur.lastrowid
+
     cur.close()
-    
+    con.close()
 
     return results if new_rowcount != old_rowcount else None
 
+# Used for delete queries and boolean of delete success
 def delete_db(query, args=()):
     con = get_db()
     
     cur = con.cursor()
+    old_rowcount = cur.rowcount
     cur.execute(query, args)
+    con.commit()
+    new_rowcount = cur.rowcount
+
     cur.close()
+    con.close()
+
+    return old_rowcount != new_rowcount
 
 # Returns the row(s) obtained from the query
 def select_db(query, args=(), one=False):
     con = get_db()
+
     cur = con.cursor().execute(query, args)
+    con.commit()
     results = cur.fetchall()
+
     cur.close()
+    con.close()
 
     return (results[0] if results else None) if one else results
