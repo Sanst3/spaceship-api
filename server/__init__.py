@@ -39,18 +39,6 @@ with app.app_context():
 def home():
     return render_template('home.html')
 
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    loc = ss.insert_location("sydney", "earth", 1)
-    loc2 = ss.insert_location("melbourne", "earth", 0)
-
-    new_ship = ss.insert_ship("bob", "john", "broken", loc2)
-
-
-    output = ss.get_ship_by_id(new_ship)
-
-    return jsonify(output)
-
 # Returns a JSON payload of a ship given a ship ID
 @app.route('/ships/<id>', methods=['GET'])
 def ships_id(id):
@@ -151,7 +139,7 @@ def locations_insert():
     else:
         return make_status_response(BAD_REQUEST)
 
-@app.route('/locations/<id>/parked', methods=['GET'])
+@app.route('/locations/parked/<id>', methods=['GET'])
 def locations_get_parked(id):
     return jsonify(ss.get_parked_ships(id))
 

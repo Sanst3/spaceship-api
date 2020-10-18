@@ -11,6 +11,7 @@ function fetchPost(url, requestBody) {
         if (response.status == 200) {
             return response.json();
         } else {
+            console.log(response);
             throw "Error";
         }
     })
@@ -64,7 +65,14 @@ function insertResult(result) {
     sucessRow.text(successText);
     wrapper.append(sucessRow);
 
-    wrapper.append(newObject(result));
+    if (Array.isArray(result)) {
+        for (resultRow of result) {
+            wrapper.append(newObject(resultRow));
+        }
+    } else {
+        wrapper.append(newObject(result));
+    }
+    
 }
 
 function newObject(obj) {
@@ -96,7 +104,7 @@ function insertLocation(loc) {
     shipWrapper.addClass("row");
     wrapper.append(shipWrapper);
 
-    const url = "http://localhost:5000/locations/" + loc["id"] + "/parked";
+    const url = "http://localhost:5000/locations/parked/" + loc["id"];
 
     fetchGet(url)
     .then (results => {
@@ -129,25 +137,6 @@ function refresh() {
     $("#state").empty();
     insertState();
 }
-// Adds a submit handler for API calls that expect a JSON response
-function addPostFormListener(formId, url) {
-    let formSelector = "#" + formId;
-    $(formSelector).submit((event) => {
-        event.preventDefault();
-        let array = $(formSelector).serializeArray();
-        let args = convertArray(array);
-
-        fetch_post(url, args)
-        .then(response => { 
-            refresh();
-            insertResult(response);
-        })
-        .catch(error => insertError());
-
-        return false;
-    });
-}
-
 function addFormListener(formId, url, method, variableId) {
     let formSelector = "#" + formId;
     $(formSelector).submit((event) => {
@@ -177,6 +166,7 @@ function addFormListener(formId, url, method, variableId) {
             insertResult(response);
         })
         .catch(error => {
+            console.log(error);
             refresh();
             insertError(); }
         );
@@ -192,4 +182,8 @@ $(document).ready(function() {
     addFormListener("shipsDeleteForm", "http://localhost:5000/ships/", "DELETE", true);
     addFormListener("locationsGetForm", "http://localhost:5000/locations/", "GET", true);
     addFormListener("locationsDeleteForm", "http://localhost:5000/locations/", "DELETE", true);
+    addFormListener("locationsGetAllForm", "http://localhost:5000/locations", "GET", false);
+    addFormListener("locationsParkedGetForm", "http://localhost:5000/locations/parked/", "GET", true);
+    addFormListener("shipsStatusSetForm", "http://localhost:5000/ships/status/", "POST", true);
+    addFormListener("shipsParkingSetForm", "http://localhost:5000/ships/parking/", "POST", true);
 });

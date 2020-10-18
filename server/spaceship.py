@@ -15,7 +15,6 @@ def print_parked_ships(location_id):
     for ship in get_parked_ships(location_id):
         print_row(ship)
 
-#TODO ENSURE STATUS TO BLOCK MOVEMENT
 def move_ship(ship_id, location_id):
     location = get_location_by_id(location_id)
     ret = False
@@ -54,7 +53,7 @@ def insert_ship(name, model, status, location_id):
 def change_ship_status(ship_id, status):
     decoded_status = decode_status(status)
     if (decoded_status):
-        db.insert_db("UPDATE ship SET status = ? WHERE id = ?", (decoder[status], ship_id))
+        db.insert_db("UPDATE ship SET status = ? WHERE id = ?", (decoded_status, ship_id))
     else:
         return False
     

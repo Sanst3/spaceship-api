@@ -61,7 +61,7 @@
         <div class="row">
             <div class="col-sm">
                 <p>/locations/[id] GET</p>
-                <form id="locationssGetForm">
+                <form id="locationsGetForm">
                     <div class="form-group">
                         <label for="locationsGetId">[id]</label>
                         <input type="text" class="form-control" name="id" id="locationsGetId">
@@ -81,6 +81,9 @@
             </div>
             <div class="col-sm">
                 <p>/locations GET</p>
+                <form id="locationsGetAllForm">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
         </div>
         <div class="row">
@@ -103,13 +106,42 @@
                 </form>
             </div>
             <div class="col-sm">
-                <p>/locations/[id]/parked GET</p>
+                <p>/locations/parked/[id] GET</p>
+                <form id="locationsParkedGetForm">
+                    <div class="form-group">
+                        <label for="locationsParkedGetId">[id]</label>
+                        <input type="text" class="form-control" name="id" id="locationsParkedGetId">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <div class="col-sm">
                 <p>/ships/status/[id] POST</p>
+                <form id="shipsStatusSetForm">
+                    <div class="form-group">
+                        <label for="shipsStatusSetId">[id]</label>
+                        <input type="text" class="form-control" name="id" id="shipsStatusSetId">
+                    </div>
+                    <div class="form-group">
+                        <label for="shipsStatusSetStatus">Status</label>
+                        <input type="text" class="form-control" name="status" id="shipsStatusSetStatus">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <div class="col-sm">
                 <p>/ships/parking/[id] POST</p>
+                <form id="shipsParkingSetForm">
+                    <div class="form-group">
+                        <label for="shipsParkingSetId">[id]</label>
+                        <input type="text" class="form-control" name="id" id="shipsParkingSetId">
+                    </div>
+                    <div class="form-group">
+                        <label for="shipsParkingSetStatus">New Location ID</label>
+                        <input type="text" class="form-control" name="location_id" id="shipsParkingSetStatus">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
         </div>
         <h1>
