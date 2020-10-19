@@ -1,5 +1,57 @@
 # spaceship-api
 
+## Installation
+
+### Dependencies
+You will need:
+- Python 3.X: https://www.python.org/downloads/
+
+### Frontend Setup
+1. Create a virtual environment in the project directory (this step only needs to be done once and can be skipped on subsequent builds):
+
+	a) Linux/MacOS: `python3 -m venv venv`
+	
+	b) Windows Powershell: `py -3 -m venv venv`
+
+2. Activate the virtual environment:
+
+	a) Linux/MacOS: `. venv/bin/activate`
+	
+	b) Windows Powershell: `venv\Scripts\activate`
+	
+	If working on Windows, you might have to execute `Set-ExecutionPolicy RemoteSigned` in order to be able to activate the virtual environment (Make sure Powershell is running as administrator for this).
+
+3. Install flask and flask-cors (this step only needs to be done once and can be skipped on subsequent builds): 
+   `pip install Flask`
+   
+   `pip install flask-cors`
+
+4. Run the following commands in the base project directory:
+
+	a) Linux/MacOS: 
+	
+	`export FLASK_APP=server`
+	
+	`export FLASK_ENV=development`
+	
+	`flask run`
+	
+	b) Windows Powershell:
+	
+	`$env:FLASK_APP="server"`
+	
+	`$env:FLASK_ENV="development"`
+	
+	`flask run`
+
+The web server should now be running and the website should be visitable at the address shown by the output after running flask (e.g. http://127.0.0.1:5000/). 
+
+`ctrl+c` to terminate the server.
+
+Run `deactivate` to end the virtual environment.
+
+# Documentation
+
 ## The Location Object
 
 ### Attributes

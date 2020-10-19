@@ -2,7 +2,6 @@ import sqlite3
 
 import click
 from flask import current_app
-from flask.cli import with_appcontext
 
 DB_PATH = "server/spaceship_db.db"
 SCHEMA_PATH = "server/spaceship_schema.sql"

@@ -28,12 +28,10 @@ def make_status_response(status):
 with app.app_context():
     db.init_db()
 
-# a simple page that says hello
 @app.route('/', methods=['GET'])
 def home():
     return render_template('home.html')
 
-# Returns a JSON payload of a ship given a ship ID
 @app.route('/ships/<id>', methods=['GET'])
 def ships_id(id):
     if not is_int(id):
