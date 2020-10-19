@@ -28,6 +28,7 @@ def make_status_response(status):
 with app.app_context():
     db.init_db()
 
+# Routing for each URL
 @app.route('/', methods=['GET'])
 def home():
     return render_template('home.html')
@@ -153,7 +154,6 @@ def locations_insert():
     new_id = ss.insert_location(payload["city_name"], payload["planet_name"], payload["capacity"])
     
     if (new_id):
-        ss.print_row(ss.get_location_by_id(new_id))
         return jsonify({ 'id': new_id })
     else:
         return make_status_response(BAD_REQUEST)

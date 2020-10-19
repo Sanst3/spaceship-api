@@ -44,7 +44,7 @@ def insert_db(query, args=()):
 
     return results if rowcount > 0 else None
 
-# Used for delete queries and boolean of delete success
+# Used for delete queries and returns boolean of delete success
 def delete_db(query, args=()):
     con = get_db()
     
@@ -61,6 +61,8 @@ def delete_db(query, args=()):
     return rowcount > 0
 
 # Returns the row(s) obtained from the query
+# Returns None if 1 result expected
+# Returns empty list if multiple results expected
 def select_db(query, args=(), one=False):
     con = get_db()
 
