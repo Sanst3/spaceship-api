@@ -5,9 +5,8 @@ from flask_cors import CORS
 from . import spaceship as ss
 
 BAD_REQUEST = "400 Bad Request"
-NO_CONTENT = "204 No Content"
 SUCCESS = "200 OK"
-# create and configure the app
+# Create and configure the app
 app = Flask(__name__, instance_relative_config=True)
 CORS(app)
 
@@ -43,7 +42,7 @@ def ships_id(id):
     if ship:
         return jsonify(ship)
     else:
-        return make_status_response(NO_CONTENT)
+        return make_status_response(BAD_REQUEST)
 
     return response
 
@@ -130,7 +129,7 @@ def locations_id(id):
     if location:
         return jsonify(location)
     else:
-        return make_status_response(NO_CONTENT)
+        return make_status_response(BAD_REQUEST)
 
     return response
 

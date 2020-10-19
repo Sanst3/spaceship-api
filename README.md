@@ -6,7 +6,7 @@
 You will need:
 - Python 3.X: https://www.python.org/downloads/
 
-### Frontend Setup
+### Server Setup
 1. Create a virtual environment in the project directory (this step only needs to be done once and can be skipped on subsequent builds):
 
 	a) Linux/MacOS: `python3 -m venv venv`
@@ -49,6 +49,12 @@ The web server should now be running and the website should be visitable at the 
 `ctrl+c` to terminate the server.
 
 Run `deactivate` to end the virtual environment.
+
+# API Demonstration
+
+Once the server is launched, a web page demonstrating each API call and its result can be accessed at the root address of the server (e.g. http://127.0.0.1:5000/).
+
+The page itself contains instructions on how to use it.
 
 # Documentation
 
