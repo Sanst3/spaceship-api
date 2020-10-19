@@ -44,7 +44,7 @@ You will need:
 	
 	`flask run`
 
-The web server should now be running and the website should be visitable at the address shown by the output after running flask (e.g. http://127.0.0.1:5000/). 
+The web server should now be running and the API root address should be accessable at the address shown by the output after running flask (e.g. http://127.0.0.1:5000/). 
 
 `ctrl+c` to terminate the server.
 
