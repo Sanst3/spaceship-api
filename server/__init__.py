@@ -25,12 +25,6 @@ def make_status_response(status):
     
     return response
 
-
-app.config.from_mapping(
-    SECRET_KEY="dev",
-    DATABASE=os.path.join(app.instance_path, "flaskr.sqlite"),
-)
-
 with app.app_context():
     db.init_db()
 

@@ -363,3 +363,88 @@ Returns a boolean of the deletion success if successful. Returns a status code o
     "deleted": true
 }
 ```
+
+## Utility API Calls
+
+Note: These calls were made so that the frontend demonstration of the backend API could work.
+
+## Get all locations
+
+### GET /locations
+
+Gets all locations in database.
+
+### Parameters 
+
+None
+
+### Returns 
+
+Returns a list of all locations.
+
+### Response
+
+```javascript
+[
+    {
+        "id": 1,
+        "city_name": "Sydney",
+        "planet_name": "Earth",
+        "capacity": 321
+    },
+    {
+        "id": 2,
+        "city_name": "Melbourne",
+        "planet_name": "Earth",
+        "capacity": 123
+    },
+    {
+        "id": 3,
+        "city_name": "Perth",
+        "planet_name": "Earth",
+        "capacity": 1234
+    }
+]
+```
+
+## Get all ships in a location
+
+### GET /locations/parked/:id
+
+Returns a list of ships that are in a location, given its location ID. Give the unique location id in `:id`.
+
+### Parameters
+
+None
+
+### Returns
+
+Returns a list of all ships contained by the location given its location ID.
+
+### Response
+
+```javascript
+[
+    {
+        "id": 1,
+        "name": "Camry",
+        "model": "Toyota",
+        "status": 2,
+        "location_id": 1
+    },
+    {
+        "id": 2,
+        "name": "Corolla",
+        "model": "Toyota",
+        "status": 0,
+        "location_id": 1
+    },
+    {
+        "id": 3,
+        "name": "Sedan",
+        "model": "Toyota",
+        "status": 1,
+        "location_id": 1
+    }
+]
+```
