@@ -2,7 +2,6 @@ import sqlite3
 
 import click
 from flask import current_app
-from flask.cli import with_appcontext
 
 DB_PATH = "server/spaceship_db.db"
 SCHEMA_PATH = "server/spaceship_schema.sql"
@@ -31,37 +30,39 @@ def insert_db(query, args=()):
     con = get_db()
 
     cur = con.cursor()
-    old_rowcount = cur.rowcount
     try:
         cur.execute(query, args)
         con.commit()
     except sqlite3.IntegrityError as err:
         print(err)
         return None
-    new_rowcount = cur.rowcount
+    rowcount = cur.rowcount
     results = cur.lastrowid
 
     cur.close()
     con.close()
 
-    return results if new_rowcount != old_rowcount else None
+    return results if rowcount > 0 else None
 
-# Used for delete queries and boolean of delete success
+# Used for delete queries and returns boolean of delete success
 def delete_db(query, args=()):
     con = get_db()
     
     cur = con.cursor()
-    old_rowcount = cur.rowcount
+    
     cur.execute(query, args)
     con.commit()
-    new_rowcount = cur.rowcount
+
+    rowcount = cur.rowcount
 
     cur.close()
     con.close()
 
-    return old_rowcount != new_rowcount
+    return rowcount > 0
 
 # Returns the row(s) obtained from the query
+# Returns None if 1 result expected
+# Returns empty list if multiple results expected
 def select_db(query, args=(), one=False):
     con = get_db()
 
