@@ -54,16 +54,6 @@ def ships_id(id):
 
     return response
 
-@app.route('/ships/<id>', methods=['DELETE'])
-def ships_del(id):
-    if not is_int(id):
-        return make_status_response(BAD_REQUEST)
-
-    if not ss.delete_ship(id):
-        make_status_response(BAD_REQUEST)
-
-    return jsonify({ 'id': id, 'deleted': "true" })
-
 @app.route('/ships', methods=['POST'])
 def ships_insert():
     payload = request.get_json()
@@ -85,63 +75,17 @@ def ships_insert():
     else:
         return make_status_response(BAD_REQUEST)
 
-# Returns a JSON payload of a ship given a ship ID
-@app.route('/locations/<id>', methods=['GET'])
-def locations_id(id):
+@app.route('/ships/<id>', methods=['DELETE'])
+def ships_del(id):
     if not is_int(id):
         return make_status_response(BAD_REQUEST)
 
-    location = ss.get_location_by_id(id)
-    
-    if location:
-        return jsonify(location)
-    else:
-        return make_status_response(NO_CONTENT)
-
-    return response
-
-@app.route('/locations/<id>', methods=['DELETE'])
-def locations_del(id):
-    if not is_int(id):
+    if not ss.delete_ship(id):
         return make_status_response(BAD_REQUEST)
 
-    if not ss.delete_location(id):
-        make_status_response(BAD_REQUEST)
+    return jsonify({ 'deleted': "true" })
 
-    return jsonify({ 'id': id, 'deleted': "true" })
-    
-@app.route('/locations', methods=['GET'])
-def locations_get_all():
-    return jsonify(ss.get_locations())
 
-@app.route('/locations', methods=['POST'])
-def locations_insert():
-    payload = request.get_json()
-    # Checks validity of call
-    if not payload:
-        return make_status_response(BAD_REQUEST)
-
-    valid_input = True
-    attr_list = ["city", "planet", "capacity"]
-
-    if not all(attr in payload for attr in attr_list):
-        return make_status_response(BAD_REQUEST)
-
-    if not is_int(payload["capacity"]):
-        return make_status_response(BAD_REQUEST)
-
-    # Adds ship to db
-    new_id = ss.insert_location(payload["city"], payload["planet"], payload["capacity"])
-    
-    if (new_id):
-        ss.print_row(ss.get_location_by_id(new_id))
-        return jsonify({ 'id': new_id })
-    else:
-        return make_status_response(BAD_REQUEST)
-
-@app.route('/locations/parked/<id>', methods=['GET'])
-def locations_get_parked(id):
-    return jsonify(ss.get_parked_ships(id))
 
 @app.route('/ships/status/<id>', methods=['POST'])
 def status_update(id):
@@ -158,6 +102,7 @@ def status_update(id):
     success = ss.change_ship_status(id, payload["status"])
 
     if (success):
+        print("MADE IT")
         return jsonify({ 'status': payload["status"]} )
     else:
         return make_status_response(BAD_REQUEST)
@@ -180,3 +125,65 @@ def ships_move(id):
         return jsonify({ 'location_id': id })
     else:
         return make_status_response(BAD_REQUEST)
+
+# Returns a JSON payload of a ship given a ship ID
+@app.route('/locations/<id>', methods=['GET'])
+def locations_id(id):
+    if not is_int(id):
+        return make_status_response(BAD_REQUEST)
+
+    location = ss.get_location_by_id(id)
+    
+    if location:
+        return jsonify(location)
+    else:
+        return make_status_response(NO_CONTENT)
+
+    return response
+
+@app.route('/locations', methods=['POST'])
+def locations_insert():
+    payload = request.get_json()
+    # Checks validity of call
+    if not payload:
+        return make_status_response(BAD_REQUEST)
+
+    valid_input = True
+    attr_list = ["city_name", "planet_name", "capacity"]
+
+    if not all(attr in payload for attr in attr_list):
+        return make_status_response(BAD_REQUEST)
+
+    if not is_int(payload["capacity"]):
+        return make_status_response(BAD_REQUEST)
+
+    # Adds ship to db
+    new_id = ss.insert_location(payload["city_name"], payload["planet_name"], payload["capacity"])
+    
+    if (new_id):
+        ss.print_row(ss.get_location_by_id(new_id))
+        return jsonify({ 'id': new_id })
+    else:
+        return make_status_response(BAD_REQUEST)
+
+
+@app.route('/locations/<id>', methods=['DELETE'])
+def locations_del(id):
+    if not is_int(id):
+        return make_status_response(BAD_REQUEST)
+
+    if not ss.delete_location(id):
+        return make_status_response(BAD_REQUEST)
+
+    return jsonify({ 'deleted': "true" })
+    
+@app.route('/locations', methods=['GET'])
+def locations_get_all():
+    return jsonify(ss.get_locations())
+
+
+@app.route('/locations/parked/<id>', methods=['GET'])
+def locations_get_parked(id):
+    return jsonify(ss.get_parked_ships(id))
+
+

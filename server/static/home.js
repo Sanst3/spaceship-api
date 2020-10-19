@@ -1,3 +1,7 @@
+function getApiUrl() {
+    return window.location.href;
+}
+
 function fetchPost(url, requestBody) {
     return fetch(url, {
         method: 'POST',
@@ -174,14 +178,14 @@ function addFormListener(formId, url, method, variableId) {
 
 $(document).ready(function() {
     refresh();
-    addFormListener("locationsInsertForm", "http://localhost:5000/locations", "POST", false);
-    addFormListener("shipsInsertForm", "http://localhost:5000/ships", "POST", false);
-    addFormListener("shipsGetForm", "http://localhost:5000/ships/", "GET", true);
-    addFormListener("shipsDeleteForm", "http://localhost:5000/ships/", "DELETE", true);
-    addFormListener("locationsGetForm", "http://localhost:5000/locations/", "GET", true);
-    addFormListener("locationsDeleteForm", "http://localhost:5000/locations/", "DELETE", true);
-    addFormListener("locationsGetAllForm", "http://localhost:5000/locations", "GET", false);
-    addFormListener("locationsParkedGetForm", "http://localhost:5000/locations/parked/", "GET", true);
-    addFormListener("shipsStatusSetForm", "http://localhost:5000/ships/status/", "POST", true);
-    addFormListener("shipsParkingSetForm", "http://localhost:5000/ships/parking/", "POST", true);
+    addFormListener("locationsInsertForm", getApiUrl() + "locations", "POST", false);
+    addFormListener("shipsInsertForm", getApiUrl() + "ships", "POST", false);
+    addFormListener("shipsGetForm", getApiUrl() + "ships/", "GET", true);
+    addFormListener("shipsDeleteForm", getApiUrl() + "ships/", "DELETE", true);
+    addFormListener("locationsGetForm", getApiUrl() + "locations/", "GET", true);
+    addFormListener("locationsDeleteForm", getApiUrl() + "locations/", "DELETE", true);
+    addFormListener("locationsGetAllForm", getApiUrl() + "locations", "GET", false);
+    addFormListener("locationsParkedGetForm", getApiUrl() + "locations/parked/", "GET", true);
+    addFormListener("shipsStatusSetForm", getApiUrl() + "ships/status/", "POST", true);
+    addFormListener("shipsParkingSetForm", getApiUrl() + "ships/parking/", "POST", true);
 });
